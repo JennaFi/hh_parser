@@ -1,18 +1,16 @@
 from abc import ABC, abstractmethod
+from typing import Any
 
 
 class BaseParser(ABC):
-    # base_url = ""
-    #
-    # def __init__(self, base_url):
-    #     self.base_url = base_url
 
+    @staticmethod
     @abstractmethod
-    def get_connection_to_api(self, **params):
+    def __connection_to_api(self, params: dict) -> Any:
         pass
-
 
     @classmethod
     @abstractmethod
-    def get_vacancies(cls, **params):
+    def load_vacancies(cls, keyword: str) -> dict:
+
         pass
