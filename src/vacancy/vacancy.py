@@ -15,18 +15,17 @@ class Vacancy(BaseVacancy):
 
     )
 
-    def __init__(self, id, name=None, area=None, url=None, employer=None, requirement=None, salary_from=0.0,
-                 salary_to=0, currency=None):
+    def __init__(self, vacancy: dict):
 
-        self.id = id
-        self.name = name
-        self.area = area
-        self.url = url
-        self.employer = employer
-        self.requirement = requirement
-        self.salary_from = salary_from
-        self.salary_to = salary_to
-        self.currency = currency
+        for vacancy_attribute in self.__slots__:
+            if self.__check_attribute(vacancy_attribute, vacancy.keys()):
+                setattr(self, vacancy_attribute, vacancy[vacancy_attribute])
+            else:
+                setattr(self, vacancy_attribute, None)
+
+
+    def __check_attribute(self, attribute, keys: list):
+        return attribute in keys
 
     def __str__(self):
         return (
