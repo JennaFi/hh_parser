@@ -25,14 +25,14 @@ def vacancies():
 @pytest.fixture
 def vacancy_1():
     return Vacancy(
-        1, "Python Developer", "Москва", "https://hh.ru/vacancy/1", "Компания A",
-       "разаработка бэкенд", 100000, 150000, 'RUR'
+        1, "Python Developer", "Москва", 100000, 150000, 'RUR', "https://hh.ru/vacancy/1",
+        "Компания A","разаработка бэкенд"
     )
 @pytest.fixture
 def vacancy_2():
     return Vacancy(
-        2, "Django разработчик", "Тверь", "https://hh.ru/vacancy/2", "Компания Б",
-       "разаработка приложений", 120000, 200000, 'RUR'
+        2, "Django разработчик", "Тверь", 120000, 200000, 'RUR', "https://hh.ru/vacancy/2",
+        "Компания Б","разаработка приложений"
     )
 
 
@@ -40,9 +40,8 @@ def vacancy_2():
 @pytest.fixture
 def vacancy_without_salary():
     return Vacancy(
-        3, "Backend Developer", "Санкт-Петербург", "https://hh.ru/vacancy/3", "Компания C",
-        "be cool", 0.0,0.0, 'RUR'
-    )
+        3, "Backend Developer", "Санкт-Петербург", 0.0, 0.0, 'RUR', "https://hh.ru/vacancy/3", "Компания C",
+        "be cool")
 
 
 @pytest.fixture

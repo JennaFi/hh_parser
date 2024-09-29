@@ -1,3 +1,5 @@
+import pytest
+
 from src.vacancy.vacancy import Vacancy
 
 
@@ -66,5 +68,16 @@ def test_filter_by_word(vacancy_objects_list):
     assert result[0]['name'] == 'Django-разработчик'
 
 
+def test_vacancy_salary_error(vacancy_dict):
 
+    vacancy_dict["salary_to"] = -800
+    with pytest.raises(ValueError, match="Зарплата не может быть отрицательной."):
+        Vacancy.new_vacancy(vacancy_dict)
+
+def test_vacancy_salary_comparison_wrong_object(vacancy_1, vacancy_dict):
+
+    with pytest.raises(
+        ValueError, match="Сравнение возможно только между объектами класса или между объектами класса и числами."
+    ):
+        print(vacancy_1 >= vacancy_dict)
 

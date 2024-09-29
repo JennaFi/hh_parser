@@ -15,29 +15,58 @@ class Vacancy(BaseVacancy):
 
     )
 
-    def __init__(self, vacancy: dict):
+    def __init__(self, id, name, area, salary_from, salary_to, currency, url, employer, requirement):
+        self.id = id
+        self.name = name
+        self.area = area
+        self.salary_from = self.__is_valid_salary(salary_from)
+        self.salary_to = self.__is_valid_salary(salary_to)
+        self.currency = currency
+        self.url = url
+        self.employer = employer
+        self.requirement = requirement if requirement else ""
 
-        for vacancy_attribute in self.__slots__:
-            if self.__check_attribute(vacancy_attribute, vacancy.keys()):
-                setattr(self, vacancy_attribute, vacancy[vacancy_attribute])
-            else:
-                setattr(self, vacancy_attribute, None)
-
-
-    def __check_attribute(self, attribute, keys: list):
-        return attribute in keys
 
     def __str__(self):
         return (
             f"id: {self.id}. Vacancy: {self.name}. Employer: {self.employer}. City: {self.area}. Salary: {self.salary_from}-{self.salary_to}, {self.currency}."
             f" URL: {self.url}. Requirements: {self.requirement}")
 
+
     def __lt__(self, other):
         return self.salary_to < other.salary_to
 
+
+    @classmethod
+    def __verify_data(cls, other):
+
+        if not isinstance(other, (int, cls)):
+            raise ValueError("Сравнение возможно только между объектами класса или между объектами класса и числами.")
+        return other if isinstance(other, int) else other.salary_to
+
+
+    @staticmethod
+    def __is_valid_salary(salary: float):
+
+        if not salary:
+            return 0
+
+        if salary < 0:
+            raise ValueError("Зарплата не может быть отрицательной.")
+        return salary
+
+
+    def __le__(self, other):
+        salary_to = self.__verify_data(other)
+        return self.salary_to <= salary_to
+
+    def __ge__(self, other):
+        salary_to = self.__verify_data(other)
+        return self.salary_to >= salary_to
+
+
     def vacancy_to_dict(self) -> dict:
         return {
-
             'id': self.id,
             'name': self.name,
             'area': self.area,
@@ -47,8 +76,8 @@ class Vacancy(BaseVacancy):
             'url': self.url,
             "currency": self.currency,
             'requirement': self.requirement
-
         }
+
 
     @classmethod
     def vacancy_processing(cls, vacancies):
@@ -74,10 +103,12 @@ class Vacancy(BaseVacancy):
             vacancies_list.append(vacancy_dict)
         return vacancies_list
 
+
     @classmethod
     def new_vacancy(cls, vacancy: dict):
         if type(vacancy) is dict and all(i in vacancy.keys() for i in cls.__slots__):
             return cls(**vacancy)
+
 
     @staticmethod
     def get_top_vacancies(vacancies: list[dict], top):
@@ -86,6 +117,7 @@ class Vacancy(BaseVacancy):
 
         for top_vacancy in sorted_vacancies:
             return top_vacancy
+
 
     @staticmethod
     def filter_by_word(vacancies: list[dict], keywords: list):
@@ -100,3 +132,5 @@ class Vacancy(BaseVacancy):
                     result.append(vacancy)
 
         return result
+
+
